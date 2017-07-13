@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using Microsoft.Office.Interop.Word;
 using DataTable = System.Data.DataTable;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -50,8 +49,8 @@ namespace OfficeScreenShot
                 strFilter = ".doc";
             else if (radioXls.Checked)
                 strFilter = ".xls";
-            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*", SearchOption.AllDirectories);
-            strFiles = strFiles.Where(f => f.IndexOf(strFilter) > 0 && f.IndexOf("~$") < 0).ToArray();
+            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
+            strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
             TextWriter writer = new StreamWriter(txtFolder.Text + "\\docer.csv", false, Encoding.UTF8);
             foreach (string f in strFiles)
             {

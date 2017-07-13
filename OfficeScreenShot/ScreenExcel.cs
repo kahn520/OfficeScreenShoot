@@ -8,9 +8,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Office.Core;
-using Microsoft.Office.Interop.Excel;
-using Application = Microsoft.Office.Interop.Excel.Application;
+using NetOffice.ExcelApi;
+using NetOffice.OfficeApi.Enums;
+using Application = NetOffice.ExcelApi.Application;
 using DataTable = System.Data.DataTable;
 using Rectangle = System.Drawing.Rectangle;
 
@@ -26,7 +26,7 @@ namespace OfficeScreenShot
         }
         public override DataTable ScreenOriginal(DataTable dt, int iPageCount)
         {
-            _Application app = new Application();
+            _Application app = GetApplication();
             app.DisplayAlerts = false;
             foreach (DataRow dr in dt.Rows)
             {
@@ -67,8 +67,6 @@ namespace OfficeScreenShot
                     dr["status"] = "异常:" + ex.Message;
                 }
             }
-            app.Quit();
-            Marshal.ReleaseComObject(app);
             return dt;
         }
 
@@ -145,6 +143,16 @@ namespace OfficeScreenShot
                 graphics.Save();
             }
             imgTemp.Dispose();
+        }
+
+        private Application GetApplication()
+        {
+            Application app = Application.GetActiveInstance();
+            if (app == null)
+            {
+                app = new Application();
+            }
+            return app;
         }
     }
 }

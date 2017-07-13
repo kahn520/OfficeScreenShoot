@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.Office.Interop.Word;
+using NetOffice.WordApi;
 using DataTable = System.Data.DataTable;
 
 namespace OfficeScreenShot
@@ -133,33 +133,34 @@ namespace OfficeScreenShot
             sizeMiddle = new Size[2] { new Size(162, 229), new Size(162, 114) };
             sizeSmall = new Size[2] { new Size(120, 174), new Size(120, 84) };
         }
+
         public override DataTable ScreenOriginal(DataTable dt, int iPageCount)
         {
-            Application app = new Application();
+            Application app = GetApplication();
             foreach (DataRow dr in dt.Rows)
             {
                 string file = dr["folder"] + "\\" + dr["file"];
+                Document doc = app.Documents.Open(file);
                 try
                 {
-                    Document doc = app.Documents.Open(file);
                     doc.ActiveWindow.Visible = true;
                     for (int i = 1; i <= doc.ActiveWindow.Panes[1].Pages.Count; i++)
                     {
                         if (i > iPageCount)
                             break;
                         Page page = doc.ActiveWindow.ActivePane.Pages[i];
-                        byte[] byt = (byte[])page.EnhMetaFileBits;
+                        byte[] byt = (byte[]) page.EnhMetaFileBits;
                         if (byt != null)
                         {
                             MemoryStream ms = new MemoryStream(byt);
                             Image mf = new Metafile(ms);
-                            Image imgDraw= new Bitmap(mf);
+                            Image imgDraw = new Bitmap(mf);
                             Image imgTemp = new Bitmap(imgDraw.Width, imgDraw.Height);
                             Graphics g = Graphics.FromImage(imgTemp);
                             g.FillRectangle(Brushes.White, 0, 0, imgTemp.Width, imgTemp.Height);
                             g.DrawImage(imgDraw, 0, 0);
                             g.Dispose();
-                            
+
                             if (doc.PageSetup.PageHeight > doc.PageSetup.PageWidth)
                             {
                                 SaveImage(imgTemp, PicureType.Big1, dr, i);
@@ -185,9 +186,6 @@ namespace OfficeScreenShot
                             imgTemp.Dispose();
                         }
                     }
-                    doc.Saved = true;
-                    doc.Close();
-                    Marshal.ReleaseComObject(doc);
                     Thread.Sleep(500);
                     dr["status"] = "OK";
                 }
@@ -195,10 +193,23 @@ namespace OfficeScreenShot
                 {
                     dr["status"] = "异常:" + ex.Message;
                 }
+                finally
+                {
+                    doc.Saved = true;
+                    doc.Close();
+                }
             }
-            app.Quit();
-            Marshal.ReleaseComObject(app);
             return dt;
+        }
+
+        private Application GetApplication()
+        {
+            Application app = Application.GetActiveInstance();
+            if (app == null)
+            {
+                app = new Application();
+            }
+            return app;
         }
     }
 }

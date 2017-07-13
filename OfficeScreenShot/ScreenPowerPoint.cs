@@ -7,7 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Office.Interop.PowerPoint;
+using NetOffice.PowerPointApi;
+using NetOffice.PowerPointApi.Enums;
 using DataTable = System.Data.DataTable;
 
 namespace OfficeScreenShot
@@ -22,7 +23,7 @@ namespace OfficeScreenShot
         }
         public override DataTable ScreenOriginal(DataTable dt, int iPageCount)
         {
-            Application app = new Application();
+            Application app = GetApplication();
             foreach (DataRow dr in dt.Rows)
             {
                 string file = dr["folder"] + "\\" + dr["file"].ToString();
@@ -69,9 +70,17 @@ namespace OfficeScreenShot
                     dr["status"] = "异常:" + ex.Message;
                 }
             }
-            app.Quit();
-            Marshal.ReleaseComObject(app);
             return dt;
+        }
+
+        private Application GetApplication()
+        {
+            Application app = Application.GetActiveInstance();
+            if (app == null)
+            {
+                app = new Application();
+            }
+            return app;
         }
     }
 }
