@@ -39,6 +39,7 @@
             this.radioPpt = new System.Windows.Forms.RadioButton();
             this.radioDoc = new System.Windows.Forms.RadioButton();
             this.radioXls = new System.Windows.Forms.RadioButton();
+            this.chkCSV = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,7 +105,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(334, 9);
+            this.label1.Location = new System.Drawing.Point(339, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 3;
@@ -112,7 +113,7 @@
             // 
             // txtPage
             // 
-            this.txtPage.Location = new System.Drawing.Point(369, 5);
+            this.txtPage.Location = new System.Drawing.Point(374, 5);
             this.txtPage.Name = "txtPage";
             this.txtPage.Size = new System.Drawing.Size(43, 21);
             this.txtPage.TabIndex = 4;
@@ -150,11 +151,22 @@
             this.radioXls.Text = ".xls";
             this.radioXls.UseVisualStyleBackColor = true;
             // 
+            // chkCSV
+            // 
+            this.chkCSV.AutoSize = true;
+            this.chkCSV.Location = new System.Drawing.Point(341, 35);
+            this.chkCSV.Name = "chkCSV";
+            this.chkCSV.Size = new System.Drawing.Size(66, 16);
+            this.chkCSV.TabIndex = 6;
+            this.chkCSV.Text = "生成CSV";
+            this.chkCSV.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(480, 590);
+            this.Controls.Add(this.chkCSV);
             this.Controls.Add(this.radioXls);
             this.Controls.Add(this.radioDoc);
             this.Controls.Add(this.radioPpt);
@@ -187,6 +199,7 @@
         private System.Windows.Forms.RadioButton radioPpt;
         private System.Windows.Forms.RadioButton radioDoc;
         private System.Windows.Forms.RadioButton radioXls;
+        private System.Windows.Forms.CheckBox chkCSV;
     }
 }
 

@@ -49,20 +49,23 @@ namespace OfficeScreenShot
                 strFilter = ".doc";
             else if (radioXls.Checked)
                 strFilter = ".xls";
-            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
-            strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
-            TextWriter writer = new StreamWriter(txtFolder.Text + "\\docer.csv", false, Encoding.UTF8);
-            foreach (string f in strFiles)
+            if (chkCSV.Checked)
             {
-                writer.WriteLine(Path.GetFileName(f));
-                DataRow dr = dt.NewRow();
-                dr["file"] = Path.GetFileName(f);
-                dr["name"] = Path.GetFileNameWithoutExtension(f);
-                dr["folder"] = Path.GetDirectoryName(f);
-                dt.Rows.Add(dr);
+                string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
+                strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
+                TextWriter writer = new StreamWriter(txtFolder.Text + "\\docer.csv", false, Encoding.UTF8);
+                foreach (string f in strFiles)
+                {
+                    writer.WriteLine(Path.GetFileName(f));
+                    DataRow dr = dt.NewRow();
+                    dr["file"] = Path.GetFileName(f);
+                    dr["name"] = Path.GetFileNameWithoutExtension(f);
+                    dr["folder"] = Path.GetDirectoryName(f);
+                    dt.Rows.Add(dr);
+                }
+                writer.Flush();
+                writer.Dispose();
             }
-            writer.Flush();
-            writer.Dispose();
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = dt;
             //dataGridView1.Columns[2].Visible = false;
