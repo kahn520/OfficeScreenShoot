@@ -77,6 +77,7 @@ namespace OfficeScreenShot
                     break;
                 }
             }
+            img.Dispose();
         }
 
 
@@ -184,6 +185,8 @@ namespace OfficeScreenShot
                             }
                             mf.Dispose();
                             imgTemp.Dispose();
+                            ms.Dispose();
+                            imgDraw.Dispose();
                         }
                     }
                     Thread.Sleep(500);
