@@ -77,7 +77,6 @@ namespace OfficeScreenShot
                     break;
                 }
             }
-            img.Dispose();
         }
 
 

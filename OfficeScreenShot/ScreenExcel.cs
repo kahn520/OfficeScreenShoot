@@ -59,7 +59,6 @@ namespace OfficeScreenShot
                         index++;
                     }
                     wb.Close(MsoTriState.msoFalse);
-                    Marshal.ReleaseComObject(wb);
                     dr["status"] = "OK";
                 }
                 catch (Exception ex)

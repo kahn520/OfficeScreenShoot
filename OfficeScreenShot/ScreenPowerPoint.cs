@@ -62,7 +62,6 @@ namespace OfficeScreenShot
                         index++;
                     }
                     ppt.Close();
-                    Marshal.ReleaseComObject(ppt);
                     dr["status"] = "OK";
                 }
                 catch (Exception ex)

@@ -49,33 +49,41 @@ namespace OfficeScreenShot
                 strFilter = ".doc";
             else if (radioXls.Checked)
                 strFilter = ".xls";
+
+            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
+            strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
+            TextWriter writer = null;
             if (chkCSV.Checked)
             {
-                string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
-                strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
-                TextWriter writer = new StreamWriter(txtFolder.Text + "\\docer.csv", false, Encoding.UTF8);
-                foreach (string f in strFiles)
-                {
+                writer = new StreamWriter(txtFolder.Text + "\\docer.csv", false, Encoding.UTF8);
+            }
+            foreach (string f in strFiles)
+            {
+                if (writer != null)
                     writer.WriteLine(Path.GetFileName(f));
-                    DataRow dr = dt.NewRow();
-                    dr["file"] = Path.GetFileName(f);
-                    dr["name"] = Path.GetFileNameWithoutExtension(f);
-                    dr["folder"] = Path.GetDirectoryName(f);
-                    dt.Rows.Add(dr);
-                }
+                DataRow dr = dt.NewRow();
+                dr["file"] = Path.GetFileName(f);
+                dr["name"] = Path.GetFileNameWithoutExtension(f);
+                dr["folder"] = Path.GetDirectoryName(f);
+                dt.Rows.Add(dr);
+            }
+            if (writer != null)
+            {
                 writer.Flush();
                 writer.Dispose();
+                writer = null;
             }
+
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = dt;
             //dataGridView1.Columns[2].Visible = false;
 
             int pagecount = Convert.ToInt32(txtPage.Text);
 
-            if(radioPpt.Checked)
+            if (radioPpt.Checked)
             {
                 InterfaceScreenOriginal screen = new ScreenPowerPoint();
-                dt =  screen.ScreenOriginal(dt, pagecount);
+                dt = screen.ScreenOriginal(dt, pagecount);
             }
             else if (radioDoc.Checked)
             {
