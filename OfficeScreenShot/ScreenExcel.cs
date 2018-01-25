@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NetOffice.ExcelApi;
+using NetOffice.ExcelApi.Enums;
 using NetOffice.OfficeApi.Enums;
 using Application = NetOffice.ExcelApi.Application;
 using DataTable = System.Data.DataTable;
