@@ -50,8 +50,8 @@ namespace OfficeScreenShot
             else if (radioXls.Checked)
                 strFilter = ".xls";
 
-            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*" + strFilter, SearchOption.AllDirectories);
-            strFiles = strFiles.Where(f => !f.Contains("~$")).ToArray();
+            string[] strFiles = Directory.GetFiles(txtFolder.Text, "*.*", SearchOption.AllDirectories);
+            strFiles = strFiles.Where(f => !f.Contains("~$") && f.Contains(strFilter)).ToArray();
             TextWriter writer = null;
             if (chkCSV.Checked)
             {
@@ -82,21 +82,34 @@ namespace OfficeScreenShot
 
             if (radioPpt.Checked)
             {
-                InterfaceScreenOriginal screen = new ScreenPowerPoint();
+                InterfaceScreenOriginal screen = new ScreenPowerPoint(chkMobile.Checked);
                 dt = screen.ScreenOriginal(dt, pagecount);
             }
             else if (radioDoc.Checked)
             {
-                InterfaceScreenOriginal screen = new ScreenOriginWord();
+                InterfaceScreenOriginal screen = new ScreenOriginWord(chkMobile.Checked);
                 dt = screen.ScreenOriginal(dt, pagecount);
             }
             else if (radioXls.Checked)
             {
-                InterfaceScreenOriginal screen = new ScreenExcel();
+                InterfaceScreenOriginal screen = new ScreenExcel(chkMobile.Checked);
                 dt = screen.ScreenOriginal(dt, pagecount);
             }
 
             MessageBox.Show("完成");
+        }
+
+        private void chkMobile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkMobile.Checked)
+            {
+                chkCSV.Checked = false;
+                chkCSV.Enabled = false;
+            }
+            else
+            {
+                chkCSV.Enabled = true;
+            }
         }
     }
 }

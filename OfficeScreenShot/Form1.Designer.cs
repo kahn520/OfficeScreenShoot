@@ -40,6 +40,7 @@
             this.radioDoc = new System.Windows.Forms.RadioButton();
             this.radioXls = new System.Windows.Forms.RadioButton();
             this.chkCSV = new System.Windows.Forms.CheckBox();
+            this.chkMobile = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,10 +71,10 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColFile,
             this.ColStatus});
-            this.dataGridView1.Location = new System.Drawing.Point(3, 61);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 58);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(476, 529);
+            this.dataGridView1.Size = new System.Drawing.Size(476, 532);
             this.dataGridView1.TabIndex = 2;
             // 
             // ColFile
@@ -122,7 +123,7 @@
             // radioPpt
             // 
             this.radioPpt.AutoSize = true;
-            this.radioPpt.Location = new System.Drawing.Point(128, 35);
+            this.radioPpt.Location = new System.Drawing.Point(67, 34);
             this.radioPpt.Name = "radioPpt";
             this.radioPpt.Size = new System.Drawing.Size(47, 16);
             this.radioPpt.TabIndex = 5;
@@ -133,7 +134,7 @@
             // 
             this.radioDoc.AutoSize = true;
             this.radioDoc.Checked = true;
-            this.radioDoc.Location = new System.Drawing.Point(195, 35);
+            this.radioDoc.Location = new System.Drawing.Point(134, 34);
             this.radioDoc.Name = "radioDoc";
             this.radioDoc.Size = new System.Drawing.Size(47, 16);
             this.radioDoc.TabIndex = 5;
@@ -144,7 +145,7 @@
             // radioXls
             // 
             this.radioXls.AutoSize = true;
-            this.radioXls.Location = new System.Drawing.Point(263, 35);
+            this.radioXls.Location = new System.Drawing.Point(202, 34);
             this.radioXls.Name = "radioXls";
             this.radioXls.Size = new System.Drawing.Size(47, 16);
             this.radioXls.TabIndex = 5;
@@ -154,18 +155,30 @@
             // chkCSV
             // 
             this.chkCSV.AutoSize = true;
-            this.chkCSV.Location = new System.Drawing.Point(341, 35);
+            this.chkCSV.Location = new System.Drawing.Point(402, 36);
             this.chkCSV.Name = "chkCSV";
             this.chkCSV.Size = new System.Drawing.Size(66, 16);
             this.chkCSV.TabIndex = 6;
             this.chkCSV.Text = "生成CSV";
             this.chkCSV.UseVisualStyleBackColor = true;
             // 
+            // chkMobile
+            // 
+            this.chkMobile.AutoSize = true;
+            this.chkMobile.Location = new System.Drawing.Point(317, 36);
+            this.chkMobile.Name = "chkMobile";
+            this.chkMobile.Size = new System.Drawing.Size(60, 16);
+            this.chkMobile.TabIndex = 6;
+            this.chkMobile.Text = "Mobile";
+            this.chkMobile.UseVisualStyleBackColor = true;
+            this.chkMobile.CheckedChanged += new System.EventHandler(this.chkMobile_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(480, 590);
+            this.Controls.Add(this.chkMobile);
             this.Controls.Add(this.chkCSV);
             this.Controls.Add(this.radioXls);
             this.Controls.Add(this.radioDoc);
@@ -200,6 +213,7 @@
         private System.Windows.Forms.RadioButton radioDoc;
         private System.Windows.Forms.RadioButton radioXls;
         private System.Windows.Forms.CheckBox chkCSV;
+        private System.Windows.Forms.CheckBox chkMobile;
     }
 }
 

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using NetOffice.WordApi;
 using DataTable = System.Data.DataTable;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace OfficeScreenShot
 {
@@ -25,8 +26,18 @@ namespace OfficeScreenShot
             Middle1,
             Middle2,
             Small1,
-            Small2
+            Small2,
+            MobileCover,
+            MobilePage
         }
+
+        protected bool IsMobile { get; set; }
+
+        public InterfaceScreenOriginal(bool bMobile)
+        {
+            IsMobile = bMobile;
+        }
+
         public abstract DataTable ScreenOriginal(DataTable dt, int iPageCount);
         
 
@@ -79,6 +90,8 @@ namespace OfficeScreenShot
             }
         }
 
+        
+
 
         public string GetBigName(DataRow dr, int index)
         {
@@ -127,7 +140,8 @@ namespace OfficeScreenShot
 
     class ScreenOriginWord : InterfaceScreenOriginal
     {
-        public ScreenOriginWord()
+        public ScreenOriginWord(bool bMobile)
+            : base(bMobile)
         {
             sizeBig = new Size[2] {new Size(721, 1020), new Size(721, 509)};
             sizeMiddle = new Size[2] { new Size(162, 229), new Size(162, 114) };
@@ -163,13 +177,26 @@ namespace OfficeScreenShot
 
                             if (doc.PageSetup.PageHeight > doc.PageSetup.PageWidth)
                             {
-                                SaveImage(imgTemp, PicureType.Big1, dr, i);
-                                if (i == 1)
+                                if (IsMobile)
                                 {
-                                    SaveImage(imgTemp, PicureType.Middle1, dr, i);
-                                }
+                                    SaveMobile(imgTemp, PicureType.MobilePage, dr, i);
+                                    if (i == 1)
+                                    {
+                                        SaveMobile(imgTemp, PicureType.MobileCover, dr, i);
+                                    }
 
-                                SaveImage(imgTemp, PicureType.Small1, dr, i);
+                                }
+                                else
+                                {
+                                    SaveImage(imgTemp, PicureType.Big1, dr, i);
+                                    if (i == 1)
+                                    {
+                                        SaveImage(imgTemp, PicureType.Middle1, dr, i);
+                                    }
+
+                                    SaveImage(imgTemp, PicureType.Small1, dr, i);
+                                }
+                                
                             }
                             else
                             {
@@ -202,6 +229,46 @@ namespace OfficeScreenShot
                 }
             }
             return dt;
+        }
+
+        public void SaveMobile(Image img, PicureType picType, DataRow dr, int index)
+        {
+            string strSaveName = "";
+            Size size = new Size();
+            if (picType == PicureType.MobileCover)
+            {
+                strSaveName = dr["folder"] + "\\cover" + dr["name"] + ".jpg";
+                size = new Size(153, 105);
+
+            }
+            else if (picType == PicureType.MobilePage)
+            {
+                strSaveName = dr["folder"] + "\\" + dr["name"] + "_" + index + ".jpg";
+                size = new Size(img.Width / 2, img.Height / 2);
+            }
+            if (strSaveName != "")
+            {
+                if (picType == PicureType.MobileCover)
+                {
+                    Image imgTemp = new Bitmap(img, size.Width, 216);
+                    Image imgSave = new Bitmap(size.Width, size.Height);
+                    using (Graphics g = Graphics.FromImage(imgSave))
+                    {
+                        g.Clear(Color.White);
+                        g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+                    }
+                    imgSave.Save(strSaveName);
+                    imgTemp.Dispose();
+                    imgSave.Dispose();
+                }
+                else
+                {
+                    Image imgSave = new Bitmap(img, size.Width/8, size.Height/8);
+                    imgSave.Save(strSaveName);
+                    imgSave.Dispose();
+                }
+
+            }
         }
 
         private Application GetApplication()

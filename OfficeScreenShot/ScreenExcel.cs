@@ -18,7 +18,8 @@ namespace OfficeScreenShot
 {
     class ScreenExcel : InterfaceScreenOriginal
     {
-        public ScreenExcel()
+        public ScreenExcel(bool bMobile)
+            : base(bMobile)
         {
             sizeBig = new Size[2] { new Size(720, 405), new Size() };
             sizeMiddle = new Size[2] { new Size(210, 117), new Size() };
@@ -28,6 +29,7 @@ namespace OfficeScreenShot
         {
             _Application app = GetApplication();
             app.DisplayAlerts = false;
+            app.DisplayClipboardWindow = false;
             foreach (DataRow dr in dt.Rows)
             {
                 string file = dr["folder"] + "\\" + dr["file"];
@@ -40,9 +42,8 @@ namespace OfficeScreenShot
                     {
                         if(index > iPageCount)
                             break;
-                        app.DisplayClipboardWindow = true;
-                        sheet.UsedRange.Copy();
                         
+                        sheet.UsedRange.Copy();
                         Object obj = Clipboard.GetData(DataFormats.Bitmap);
                         Image img = (Bitmap) obj;
                         Clipboard.Clear();
