@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NetOffice.ExcelApi;
+using NetOffice.ExcelApi.Enums;
 using NetOffice.OfficeApi.Enums;
 using Application = NetOffice.ExcelApi.Application;
 using DataTable = System.Data.DataTable;
@@ -28,6 +29,7 @@ namespace OfficeScreenShot
         {
             _Application app = GetApplication();
             app.DisplayAlerts = false;
+            app.DisplayClipboardWindow = false;
             foreach (DataRow dr in dt.Rows)
             {
                 string file = dr["folder"] + "\\" + dr["file"];
@@ -40,7 +42,6 @@ namespace OfficeScreenShot
                     {
                         if(index > iPageCount)
                             break;
-                        app.DisplayClipboardWindow = true;
                         sheet.UsedRange.Copy();
                         
                         Object obj = Clipboard.GetData(DataFormats.Bitmap);
