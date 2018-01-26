@@ -101,7 +101,7 @@ namespace OfficeScreenShot
             else if (picType == PicureType.MobilePage)
             {
                 strSaveName = dr["folder"] + "\\" + dr["name"] + "_" + index + ".jpg";
-                size = new Size(img.Width / 2, img.Height / 2);
+                size = new Size(img.Width / 3, img.Height / 3);
             }
             if (strSaveName != "")
             {
