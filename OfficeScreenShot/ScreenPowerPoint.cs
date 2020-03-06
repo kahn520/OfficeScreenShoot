@@ -95,24 +95,24 @@ namespace OfficeScreenShot
             if (picType == PicureType.MobileCover)
             {
                 strSaveName = dr["folder"] + "\\cover" + dr["name"] + ".jpg";
-                size = new Size(153, 105);
+                size = new Size(306, 210);
 
             }
             else if (picType == PicureType.MobilePage)
             {
                 strSaveName = dr["folder"] + "\\" + dr["name"] + "_" + index + ".jpg";
-                size = new Size(img.Width / 3, img.Height / 3);
+                size = new Size(img.Width / 2, img.Height / 2);
             }
             if (strSaveName != "")
             {
                 if (bWide && picType == PicureType.MobileCover)
                 {
-                    Image imgTemp = new Bitmap(img, 186, 105);
+                    Image imgTemp = new Bitmap(img, 372, 210);
                     Image imgSave = new Bitmap(size.Width, size.Height);
                     using (Graphics g = Graphics.FromImage(imgSave))
                     {
                         g.Clear(Color.White);
-                        g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle((186 - size.Width) / 2, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+                        g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle((372 - size.Width) / 2, 0, size.Width, size.Height), GraphicsUnit.Pixel);
                     }
                     imgSave.Save(strSaveName);
                     imgTemp.Dispose();

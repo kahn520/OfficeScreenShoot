@@ -179,10 +179,10 @@ namespace OfficeScreenShot
                             {
                                 if (IsMobile)
                                 {
-                                    SaveMobile(imgTemp, PicureType.MobilePage, dr, i);
+                                    SaveMobile(imgTemp, PicureType.MobilePage, dr, i, false);
                                     if (i == 1)
                                     {
-                                        SaveMobile(imgTemp, PicureType.MobileCover, dr, i);
+                                        SaveMobile(imgTemp, PicureType.MobileCover, dr, i, false);
                                     }
 
                                 }
@@ -200,14 +200,26 @@ namespace OfficeScreenShot
                             }
                             else
                             {
-                                SaveImage(imgTemp, PicureType.Big2, dr, i);
-
-                                if (i == 1)
+                                if (IsMobile)
                                 {
-                                    SaveImage(imgTemp, PicureType.Middle2, dr, i);
+                                    SaveMobile(imgTemp, PicureType.MobilePage, dr, i, true);
+                                    if (i == 1)
+                                    {
+                                        SaveMobile(imgTemp, PicureType.MobileCover, dr, i, true);
+                                    }
                                 }
+                                else
+                                {
+                                    SaveImage(imgTemp, PicureType.Big2, dr, i);
 
-                                SaveImage(imgTemp, PicureType.Small2, dr, i);
+                                    if (i == 1)
+                                    {
+                                        SaveImage(imgTemp, PicureType.Middle2, dr, i);
+                                    }
+
+                                    SaveImage(imgTemp, PicureType.Small2, dr, i);
+                                }
+                                
                             }
                             mf.Dispose();
                             imgTemp.Dispose();
@@ -231,14 +243,14 @@ namespace OfficeScreenShot
             return dt;
         }
 
-        public void SaveMobile(Image img, PicureType picType, DataRow dr, int index)
+        public void SaveMobile(Image img, PicureType picType, DataRow dr, int index, bool bWide)
         {
             string strSaveName = "";
             Size size = new Size();
             if (picType == PicureType.MobileCover)
             {
                 strSaveName = dr["folder"] + "\\cover" + dr["name"] + ".jpg";
-                size = new Size(153, 105);
+                size = new Size(306, 210);
 
             }
             else if (picType == PicureType.MobilePage)
@@ -250,20 +262,47 @@ namespace OfficeScreenShot
             {
                 if (picType == PicureType.MobileCover)
                 {
-                    Image imgTemp = new Bitmap(img, size.Width, 216);
-                    Image imgSave = new Bitmap(size.Width, size.Height);
-                    using (Graphics g = Graphics.FromImage(imgSave))
+                    if (bWide)
                     {
-                        g.Clear(Color.White);
-                        g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+                        Image imgTemp = new Bitmap(img, (int) ((float) size.Height / img.Height * img.Width), size.Height);
+                        Image imgSave = new Bitmap(size.Width, size.Height);
+                        if (imgTemp.Width > imgSave.Width)
+                        {
+                            using (Graphics g = Graphics.FromImage(imgSave))
+                            {
+                                g.Clear(Color.White);
+                                g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle((imgTemp.Width-imgSave.Width)/2, 0, imgSave.Width, imgTemp.Height), GraphicsUnit.Pixel);
+                            }
+                        }
+                        else
+                        {
+                            using (Graphics g = Graphics.FromImage(imgSave))
+                            {
+                                g.Clear(Color.White);
+                                g.DrawImage(imgTemp, new Rectangle((imgSave.Width - imgTemp.Width) / 2, 0, imgTemp.Width, size.Height), new Rectangle(0, 0, imgTemp.Width, imgTemp.Height), GraphicsUnit.Pixel);
+                            }
+                        }
+                        imgSave.Save(strSaveName);
+                        imgTemp.Dispose();
+                        imgSave.Dispose();
                     }
-                    imgSave.Save(strSaveName);
-                    imgTemp.Dispose();
-                    imgSave.Dispose();
+                    else
+                    {
+                        Image imgTemp = new Bitmap(img, size.Width, 422);
+                        Image imgSave = new Bitmap(size.Width, size.Height);
+                        using (Graphics g = Graphics.FromImage(imgSave))
+                        {
+                            g.Clear(Color.White);
+                            g.DrawImage(imgTemp, new Rectangle(0, 0, size.Width, size.Height), new Rectangle(0, 0, size.Width, size.Height), GraphicsUnit.Pixel);
+                        }
+                        imgSave.Save(strSaveName);
+                        imgTemp.Dispose();
+                        imgSave.Dispose();
+                    }
                 }
                 else
                 {
-                    Image imgSave = new Bitmap(img, size.Width/8, size.Height/8);
+                    Image imgSave = new Bitmap(img, size.Width/3, size.Height/3);
                     imgSave.Save(strSaveName);
                     imgSave.Dispose();
                 }
