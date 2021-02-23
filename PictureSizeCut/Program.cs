@@ -22,18 +22,23 @@ namespace PictureSizeCut
                 int i = 0;
                 listFiles.ForEach(f =>
                 {
+                    bool bHasEnd = Path.GetFileNameWithoutExtension(f).EndsWith("_1");
+                    string strEnd = bHasEnd ? "" : "_1";
                     i++;
                     using (Image imgSource = new Bitmap(f))
                     {
                         using (Image imgMiddle = new Bitmap(imgSource, 210, Convert.ToInt32(imgSource.Height/(imgSource.Width/210.0f))))
                         {
-                            imgMiddle.Save($@"{Path.GetDirectoryName(f)}\m_{Path.GetFileNameWithoutExtension(f)}_1{Path.GetExtension(f)}");
+                            imgMiddle.Save($@"{Path.GetDirectoryName(f)}\m_{Path.GetFileNameWithoutExtension(f)}{strEnd}{Path.GetExtension(f)}");
                         }
                         using (Image imgSmall = new Bitmap(imgSource, 120, Convert.ToInt32(imgSource.Height / (imgSource.Width / 120.0f))))
                         {
-                            imgSmall.Save($@"{Path.GetDirectoryName(f)}\1_{Path.GetFileNameWithoutExtension(f)}_1{Path.GetExtension(f)}");
+                            imgSmall.Save($@"{Path.GetDirectoryName(f)}\1_{Path.GetFileNameWithoutExtension(f)}{strEnd}{Path.GetExtension(f)}");
                         }
                     }
+
+                    if (!bHasEnd)
+                        File.Move(f, $@"{Path.GetDirectoryName(f)}\{Path.GetFileName(f)}{strEnd}{Path.GetExtension(f)}");
                     Console.WriteLine(i + "/" + listFiles.Count);
                 });
                 Console.WriteLine("完成");
