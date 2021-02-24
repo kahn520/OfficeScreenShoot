@@ -38,7 +38,7 @@ namespace PictureSizeCut
                     }
 
                     if (!bHasEnd)
-                        File.Move(f, $@"{Path.GetDirectoryName(f)}\{Path.GetFileName(f)}{strEnd}{Path.GetExtension(f)}");
+                        File.Move(f, $@"{Path.GetDirectoryName(f)}\{Path.GetFileNameWithoutExtension(f)}{strEnd}{Path.GetExtension(f)}");
                     Console.WriteLine(i + "/" + listFiles.Count);
                 });
                 Console.WriteLine("完成");
